@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Resin {
+  id String @id @default(uuid())
+  name String
+  manufacturer String
+  color String
+  description String?
+  comments ResinComment[]
+  trials Trial[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ResinComment {
+  id String @id @default(uuid())
+  resinId String
+  resin Resin @relation(fields: [resinId], references: [id])
+  comment String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Trial {
+  id String @id @default(uuid())
+  resinId String
+  resin Resin @relation(fields: [resinId], references: [id])
+  comments TrialComment[]
+  status Status
+  layerHeight Float
+  speed Float
+  bottomLayerCount Int
+  bottomLayerExposureTime Float
+  bottomLayerLightOffDelay Float
+  bottomLayerLiftDistance Float
+  bottomLayerLiftSpeed Float
+  bottomLayerTransitionCount Int
+  normalExposureTime Float
+  normalLightOffDelay Float
+  normalLiftDistance Float
+  normalLiftSpeed Float
+  transitionType TransitionType @default(LINEAR)
+  notes String @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TrialComment {
+  id String @id @default(uuid())
+  trialId String
+  trial Trial @relation(fields: [trialId], references: [id])
+  comment String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Status {
+  IN_PROGRESS
+  SUCCESS
+  FAILURE
+  PARTIAL
+  UNDER_EXPOSED
+  OVER_EXPOSED
+  FIRST_LAYER_UNDER_EXPOSED
+  FIRST_LAYER_OVER_EXPOSED
+}
+
+enum TransitionType {
+  LINEAR
+}
