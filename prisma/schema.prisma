@@ -33,6 +33,7 @@ model ResinComment {
 
 model Trial {
   id String @id @default(uuid())
+  name String @default("")
   resinId String
   resin Resin @relation(fields: [resinId], references: [id])
   comments TrialComment[]

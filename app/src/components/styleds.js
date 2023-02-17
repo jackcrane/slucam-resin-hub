@@ -23,7 +23,7 @@ export const Dot = styled.div`
     switch (props.status) {
       case "SUCCESS":
         return "#52c41a";
-      case "PARTIAL":
+      case "IN_PROGRESS":
         return "#faad14";
       default:
         return "#f5222d";

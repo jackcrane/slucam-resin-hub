@@ -13,10 +13,9 @@ const Resins = (props) => {
   const [resinModalVisible, setResinModalVisible] = useState(false);
   const [createResinModalVisible, setCreateResinModalVisible] = useState(false);
   const [createTrialModalVisible, setCreateTrialModalVisible] = useState(false);
-
   const [bump, setBump] = useState(0);
-
   const [search, setSearch] = useState("");
+  const [columnSort, setColumnSort] = useState({});
 
   useEffect(() => {
     setResins(
@@ -30,14 +29,28 @@ const Resins = (props) => {
   }, [unfilteredResins, search]);
 
   useEffect(() => {
-    console.log("Visible state changed to: ", resinModalVisible);
-  }, [resinModalVisible]);
-
-  useEffect(() => {
     fetch("/resins")
       .then((res) => res.json())
       .then((resins) => setUnfilteredResins(resins));
   }, [bump]);
+
+  const handleTableChange = (pagination, filters, sorter) => {
+    setColumnSort(sorter);
+  };
+
+  const sortedResins = [...resins];
+
+  if (columnSort.columnKey) {
+    const { columnKey, order } = columnSort;
+    sortedResins.sort((a, b) => {
+      if (order === "descend") {
+        return b[columnKey].localeCompare(a[columnKey]);
+      } else {
+        return a[columnKey].localeCompare(b[columnKey]);
+      }
+    });
+  }
+
   return (
     <>
       <Container>
@@ -61,7 +74,7 @@ const Resins = (props) => {
             type="primary"
             onClick={() => setCreateTrialModalVisible(true)}
           >
-            Record a trial
+            Record a print
           </Button>
         </Space>
         <Divider />
@@ -75,24 +88,44 @@ const Resins = (props) => {
             />
           </Between>
           <Table
-            dataSource={resins}
+            dataSource={sortedResins}
             columns={[
-              { title: "Name", dataIndex: "name", key: "name" },
+              {
+                title: "Name",
+                dataIndex: "name",
+                key: "name",
+                sorter: (a, b) => a.name.localeCompare(b.name),
+                sortDirections: ["descend", "ascend"],
+              },
               {
                 title: "Manufacturer",
                 dataIndex: "manufacturer",
                 key: "manufacturer",
+                sorter: (a, b) => a.manufacturer.localeCompare(b.manufacturer),
+                sortDirections: ["descend", "ascend"],
               },
               { title: "Color", dataIndex: "color", key: "color" },
-              { title: "Trials", dataIndex: "trials", key: "trials" },
               {
-                title: "Updated",
-                dataIndex: "updatedAt",
-                key: "updatedAt",
-                render: (text) =>
-                  `${moment(text).format("MM/DD/YYYY hh:mm a")} (${moment(
-                    text
-                  ).fromNow()})`,
+                title: "Trials",
+                dataIndex: "trials",
+                key: "trials",
+                sorter: (a, b) => a.trials - b.trials,
+                sortDirections: ["descend", "ascend"],
+              },
+              {
+                title: "In progress",
+                dataIndex: "inProgress",
+                key: "inProgress",
+                sorter: (a, b) => a.inProgress - b.inProgress,
+                sortDirections: ["descend", "ascend"],
+              },
+              {
+                title: "Created",
+                dataIndex: "createdAt",
+                key: "createdAt",
+                render: (text) => moment(text).format("MM/DD/YYYY hh:mm a"),
+                sorter: (a, b) => moment(a.createdAt) - moment(b.createdAt),
+                sortDirections: ["descend", "ascend"],
               },
               {
                 title: "Open",

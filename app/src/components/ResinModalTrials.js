@@ -22,6 +22,7 @@
 */
 
 import {
+  Button,
   Card,
   Collapse,
   Descriptions,
@@ -34,6 +35,7 @@ import {
 import Typography from "antd/es/typography/Typography";
 import moment from "moment";
 import { useEffect, useState } from "react";
+import CreateTrialModal from "./CreateTrialModal";
 import { Dot } from "./styleds";
 
 const LabelRow = ({ label, children }) => (
@@ -45,6 +47,9 @@ const LabelRow = ({ label, children }) => (
 const ModalTrials = (props) => {
   const [trials, setTrials] = useState([]);
   const [unfilteredTrials, setUnfilteredTrials] = useState([]);
+  const [selectedTrial, setSelectedTrial] = useState(null);
+  const [modifyTrialModalVisible, setModifyTrialModalVisible] = useState(false);
+  const [bump, setBump] = useState(0);
   useEffect(() => {
     fetch(`/resins/${props.resin.id}`)
       .then((res) => res.json())
@@ -60,25 +65,49 @@ const ModalTrials = (props) => {
         return resin;
       })
       .then((resin) => setUnfilteredTrials(resin.trials));
-  }, [props]);
+  }, [props, bump]);
   if (unfilteredTrials.length === 0) return <Empty description="No trials" />;
 
   return (
     <>
       <Space direction="vertical" style={{ width: "100%" }}>
+        <Button
+          onClick={() => {
+            setSelectedTrial(null);
+            setModifyTrialModalVisible(true);
+            console.log("print");
+          }}
+        >
+          Create Print record
+        </Button>
         <Collapse>
           {unfilteredTrials.map((trial, i) => (
             <Collapse.Panel
               key={i}
               header={
-                <Space>
-                  <Dot status={trial.status} />
-                  {trial.status}
-                  {moment(trial.createdAt).format("MM/DD/YYYY hh:mm a")}
+                <Space direction="vertical" size={0}>
+                  <Space direction="horizontal">
+                    <Dot status={trial.status} />
+                    {trial.name}
+                  </Space>
+                  <Space direction="horizontal">
+                    <Typography.Text type="secondary">
+                      {trial.status}{" "}
+                      {moment(trial.createdAt).format("MM/DD/YYYY hh:mm a")}
+                    </Typography.Text>
+                  </Space>
                 </Space>
               }
             >
               <Space direction="vertical" style={{ width: "100%" }}>
+                <Button
+                  onClick={() => {
+                    setSelectedTrial(trial);
+                    setModifyTrialModalVisible(true);
+                  }}
+                >
+                  Modify
+                </Button>
                 <LabelRow label="Date">
                   {moment(trial.createdAt).format("MM/DD/YYYY hh:mm a")}
                 </LabelRow>
@@ -134,6 +163,17 @@ const ModalTrials = (props) => {
           ))}
         </Collapse>
       </Space>
+      <CreateTrialModal
+        trialId={selectedTrial?.id}
+        resinId={props.resin.id}
+        role={selectedTrial && "update"}
+        visible={modifyTrialModalVisible}
+        onClose={() => setModifyTrialModalVisible(false)}
+        onTrialCreated={() => {
+          setBump(bump + 1);
+        }}
+        key={`create-trial-modal-${bump}`}
+      />
     </>
   );
 };

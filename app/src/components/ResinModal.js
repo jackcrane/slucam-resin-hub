@@ -1,7 +1,6 @@
 import { Divider, Drawer, Image, List, Tabs, Typography } from "antd";
 import moment from "moment";
 import React, { useState, useEffect } from "react";
-import ModalTimeline from "./ResinModalTimeline";
 import ModalTrials from "./ResinModalTrials";
 import { Between } from "./styleds";
 
@@ -60,24 +59,8 @@ const ResinModal = (props) => {
         )}
       />
       <Divider />
-      <Typography.Title level={4}>Trials</Typography.Title>
+      <Typography.Title level={4}>Prints</Typography.Title>
       <ModalTrials resin={resin} />
-      {/* <Tabs
-        centered
-        defaultActiveKey="trials"
-        items={[
-          {
-            label: "Trials",
-            key: "trials",
-            children: <ModalTrials resin={resin} />,
-          },
-          {
-            label: "Timeline",
-            key: "timeline",
-            children: <ModalTimeline resin={resin} />,
-          },
-        ]}
-      /> */}
     </Drawer>
   );
 };
