@@ -199,9 +199,14 @@ app.get("/resins/:id/success", async (req, res) => {
       resinId: id,
       status: "SUCCESS",
     },
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: 1,
   });
   res.json(trial);
 });
+
 
 app.get("/alltrials/names", async (req, res) => {
   const trials = await prisma.trial.findMany({

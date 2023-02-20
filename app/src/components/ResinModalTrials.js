@@ -133,11 +133,11 @@ const ModalTrials = (props) => {
                     <LabelRow label="Bottom Layer Transition Count">
                       {trial.bottomLayerTransitionCount}
                     </LabelRow>
+                  </Collapse.Panel>
+                  <Collapse.Panel header="Normal Layer">
                     <LabelRow label="Normal Exposure Time">
                       {trial.normalExposureTime}
                     </LabelRow>
-                  </Collapse.Panel>
-                  <Collapse.Panel header="Normal Layer">
                     <LabelRow label="Normal Light Off Delay">
                       {trial.normalLightOffDelay}
                     </LabelRow>
