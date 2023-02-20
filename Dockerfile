@@ -14,7 +14,7 @@ RUN npm install
 
 # Bundle app source
 COPY . .
-npm install
+RUN npm install
 RUN npm run build
 RUN npx prisma generate
 
