@@ -5,6 +5,7 @@ import moment from "moment";
 import ResinModal from "./ResinModal";
 import CreateResinModal from "./CreateResinModal";
 import CreateTrialModal from "./CreateTrialModal";
+import useWindowDimensions from "../hooks/useWindowDimensions";
 
 const Resins = (props) => {
   const [resins, setResins] = useState([]);
@@ -51,16 +52,20 @@ const Resins = (props) => {
     });
   }
 
+  const { height, width } = useWindowDimensions();
+
   return (
     <>
       <Container>
         <Between>
           <Typography.Title>Resins</Typography.Title>
-          <Image
-            height={60}
-            preview={false}
-            src="https://www.slu.edu/marcom/tools-downloads/imgs/logo/left-aligned/slu_logoleftaligned_rgb.png"
-          />
+          {width > 768 && (
+            <Image
+              height={60}
+              preview={false}
+              src="https://www.slu.edu/marcom/tools-downloads/imgs/logo/left-aligned/slu_logoleftaligned_rgb.png"
+            />
+          )}
         </Between>
 
         <Space>
