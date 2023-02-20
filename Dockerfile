@@ -16,6 +16,7 @@ RUN npm install
 COPY . .
 RUN npm install
 RUN cd app
+RUN npm install
 RUN npm run build
 RUN cd ..
 RUN npx prisma generate
