@@ -15,7 +15,9 @@ RUN npm install
 # Bundle app source
 COPY . .
 RUN npm install
+RUN cd app
 RUN npm run build
+RUN cd ..
 RUN npx prisma generate
 
 EXPOSE 3000
