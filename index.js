@@ -69,6 +69,7 @@ app.get("/resins/:id/qr", async (req, res) => {
 
 app.post("/trial", async (req, res) => {
   const {
+    printer,
     resinId,
     status,
     layerHeight,
@@ -91,6 +92,7 @@ app.post("/trial", async (req, res) => {
     const trial = await prisma.trial.create({
       data: {
         name,
+        printer,
         resinId,
         status,
         layerHeight,

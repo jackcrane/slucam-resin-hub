@@ -34,6 +34,7 @@ model ResinComment {
 model Trial {
   id String @id @default(uuid())
   name String @default("")
+  printer Printers @default(PHOTON)
   resinId String
   resin Resin @relation(fields: [resinId], references: [id])
   comments TrialComment[]
@@ -78,4 +79,9 @@ enum Status {
 
 enum TransitionType {
   LINEAR
+}
+
+enum Printers {
+  PHOTON
+  PHROZEN
 }

@@ -40,6 +40,7 @@ const CreateTrialModal = (props) => {
   }, [tick]);
 
   const [resin, setResin] = useState("");
+  const [printer, setPrinter] = useState("");
   const [name, setName] = useState("");
   const [status, setStatus] = useState("");
   const [layerHeight, setLayerHeight] = useState(null);
@@ -66,6 +67,7 @@ const CreateTrialModal = (props) => {
       fetch(`/trials/${props.trialId}`)
         .then((res) => res.json())
         .then((trial) => {
+          setPrinter(trial.printer);
           setResin(trial.resinId);
           setName(trial.name);
           setStatus(trial.status);
@@ -102,6 +104,7 @@ const CreateTrialModal = (props) => {
         },
         body: JSON.stringify({
           name,
+          printer,
           resinId: resin,
           status,
           layerHeight,
@@ -144,6 +147,7 @@ const CreateTrialModal = (props) => {
     });
     const fj = await f.json();
     setLayerHeight(fj.layerHeight);
+    setPrinter(fj.printer);
     setSpeed(fj.speed);
     setBottomLayerCount(fj.bottomLayerCount);
     setBottomLayerExposureTime(fj.bottomLayerExposureTime);
@@ -176,6 +180,24 @@ const CreateTrialModal = (props) => {
             onChange={(e) => setName(e.target.value)}
             value={name}
             style={{ width: "100%" }}
+          />
+          <Select
+            placeholder="Select a printer"
+            showSearch
+            optionFilterProp="name"
+            showArrow
+            filterOption={(input, option) => {
+              return JSON.stringify(option)
+                .toLowerCase()
+                .includes(input.toLowerCase());
+            }}
+            style={{ width: "100%" }}
+            options={{
+              Phrozen: "PHROZEN",
+              Photon: "PHOTON",
+            }}
+            onChange={(e) => setPrinter(e)}
+            value={printer}
           />
           <Divider />
           <Typography.Title level={4}>Resin information</Typography.Title>

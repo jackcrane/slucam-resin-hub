@@ -2,6 +2,7 @@ import { Divider, Drawer, Image, List, Tabs, Typography } from "antd";
 import moment from "moment";
 import React, { useState, useEffect } from "react";
 import ModalTrials from "./ResinModalTrials";
+import { ModalGraph } from "./ModalGraph";
 import { Between } from "./styleds";
 
 const ResinModal = (props) => {

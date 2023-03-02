@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Trial` ADD COLUMN `printer` ENUM('PHOTON', 'PHROZEN') NOT NULL DEFAULT 'PHOTON';
