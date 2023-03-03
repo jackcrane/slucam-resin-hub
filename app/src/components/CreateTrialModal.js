@@ -183,19 +183,18 @@ const CreateTrialModal = (props) => {
           />
           <Select
             placeholder="Select a printer"
-            showSearch
-            optionFilterProp="name"
             showArrow
-            filterOption={(input, option) => {
-              return JSON.stringify(option)
-                .toLowerCase()
-                .includes(input.toLowerCase());
-            }}
             style={{ width: "100%" }}
-            options={{
-              Phrozen: "PHROZEN",
-              Photon: "PHOTON",
-            }}
+            options={[
+              {
+                name: "Phrozen",
+                value: "PHROZEN",
+              },
+              {
+                name: "Photon",
+                value: "PHOTON",
+              },
+            ]}
             onChange={(e) => setPrinter(e)}
             value={printer}
           />
