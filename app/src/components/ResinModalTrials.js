@@ -111,6 +111,7 @@ const ModalTrials = (props) => {
                 <LabelRow label="Date">
                   {moment(trial.createdAt).format("MM/DD/YYYY hh:mm a")}
                 </LabelRow>
+                <LabelRow label="Printer">{trial.printer}</LabelRow>
                 <LabelRow label="Layer Height">{trial.layerHeight}</LabelRow>
                 <LabelRow label="Speed">{trial.speed}</LabelRow>
                 <Collapse>
