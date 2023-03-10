@@ -8,10 +8,11 @@ import QRCode from "qrcode";
 import fetch from "node-fetch";
 
 app.use(express.json());
+app.set("trust proxy", true);
 
 // Verify request is from St. Louis
 app.use(async (req, res, next) => {
-  const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+  const ip = req.ip;
   console.log(ip);
   const response = await fetch(
     `https://api.ipgeolocation.io/ipgeo?apiKey=d20d5b9cf0f8498eae4ac3a5e4c07b40&ip=${ip}`
