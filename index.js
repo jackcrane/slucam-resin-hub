@@ -5,8 +5,31 @@ import JsBarcode from "jsbarcode";
 import { Canvas } from "canvas";
 const prisma = new PrismaClient();
 import QRCode from "qrcode";
+import fetch from "node-fetch";
 
 app.use(express.json());
+
+// Verify request is from St. Louis
+app.use(async (req, res, next) => {
+  const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+  const response = await fetch(
+    `https://api.ipgeolocation.io/ipgeo?apiKey=d20d5b9cf0f8498eae4ac3a5e4c07b40&ip=${ip}`
+  );
+  const data = await response.json();
+  if (
+    data.country_name === "United States" &&
+    data.city === "St. Louis" &&
+    data.organization === "St. Louis University"
+  ) {
+    next();
+  } else {
+    res
+      .status(403)
+      .send(
+        `This is only accessible from IPs at Saint Louis University. Your IP is ${ip} from ${data.city}, ${data.country_name}. If you believe this is an error, please contact jack.crane@slu.edu. If you are on SLU's campus, ensure you are on the slu-users network and not using a VPN.`
+      );
+  }
+});
 
 app.use(express.static("app/build"));
 
@@ -208,7 +231,6 @@ app.get("/resins/:id/success", async (req, res) => {
   });
   res.json(trial);
 });
-
 
 app.get("/alltrials/names", async (req, res) => {
   const trials = await prisma.trial.findMany({
