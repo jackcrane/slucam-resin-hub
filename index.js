@@ -18,11 +18,7 @@ app.use(async (req, res, next) => {
     `https://api.ipgeolocation.io/ipgeo?apiKey=d20d5b9cf0f8498eae4ac3a5e4c07b40&ip=${ip}`
   );
   const data = await response.json();
-  if (
-    data.country_name === "United States" &&
-    data.city === "St. Louis" &&
-    data.organization === "St. Louis University"
-  ) {
+  if (data.organization === "St. Louis University") {
     next();
   } else {
     res
