@@ -11,7 +11,7 @@ app.use(express.json());
 
 // Verify request is from St. Louis
 app.use(async (req, res, next) => {
-  console.log(req);
+  console.log(req.headers);
   const ip = req.headers["X-Original-Forwarded-For"];
   console.log(ip);
   const response = await fetch(
