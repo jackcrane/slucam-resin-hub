@@ -12,6 +12,7 @@ app.set("trust proxy", true);
 
 // Verify request is from St. Louis
 app.use(async (req, res, next) => {
+  console.log(req);
   const ip = req.ip;
   console.log(ip);
   const response = await fetch(
